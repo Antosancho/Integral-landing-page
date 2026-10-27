@@ -1,0 +1,21 @@
+---
+import { SITE } from '../../config/site';
+import { footer } from '../../data/footer';
+import { buildWhatsAppUrl } from '../../lib/contact';
+
+const wa = buildWhatsAppUrl(SITE.whatsapp);
+const { label, withWhatsapp, withoutWhatsapp } = footer.floating;
+const sub = wa ? withWhatsapp : withoutWhatsapp;
+---
+
+<a
+  href={wa ?? '#contacto'}
+  target={wa ? '_blank' : undefined}
+  rel={wa ? 'noopener noreferrer' : undefined}
+  data-cta="flotante"
+  aria-label={`${label} ${sub}`}
+  class="bg-text text-bg fixed right-4 bottom-4 z-40 flex flex-col rounded-full px-5 py-3 leading-tight font-bold shadow-lg"
+>
+  <span>{label}</span>
+  <span class="text-xs font-semibold opacity-80">{sub}</span>
+</a>

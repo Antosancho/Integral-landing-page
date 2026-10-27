@@ -1,0 +1,29 @@
+---
+import SEO from '../components/seo/SEO.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const props = Astro.props;
+---
+
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO {...props} />
+  </head>
+  <body class="bg-bg font-sans text-text antialiased">
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:bg-text focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-bg"
+      >Saltar al contenido</a
+    >
+    <slot />
+  </body>
+</html>

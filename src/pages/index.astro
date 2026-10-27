@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import FloatingCTA from '../components/layout/FloatingCTA.astro';
+import Hero from '../components/sections/Hero.astro';
+import AreasMarquee from '../components/sections/AreasMarquee.astro';
+import Problema from '../components/sections/Problema.astro';
+import CalculadoraSection from '../components/sections/CalculadoraSection.astro';
+import Servicios from '../components/sections/Servicios.astro';
+import Rubros from '../components/sections/Rubros.astro';
+import Metodo from '../components/sections/Metodo.astro';
+import Caso from '../components/sections/Caso.astro';
+import Equipo from '../components/sections/Equipo.astro';
+import FAQ from '../components/sections/FAQ.astro';
+import Contacto from '../components/sections/Contacto.astro';
+import { caso } from '../data/caso';
+---
+
+<BaseLayout>
+  <Header />
+  <main id="contenido">
+    <Hero />
+    <AreasMarquee />
+    <Problema />
+    <CalculadoraSection />
+    <Servicios />
+    <Rubros />
+    <Metodo />
+    {caso.enabled && <Caso />}
+    <Equipo />
+    <FAQ />
+    <Contacto />
+  </main>
+  <Footer />
+  <FloatingCTA />
+</BaseLayout>

@@ -1,34 +1,47 @@
 {
-  "name": "integral-landing-page",
+  "name": "factor-integral-landing",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "typecheck": "astro check",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:build": "vitest run --config vitest.build.config.ts",
+    "og": "node scripts/generate-og.mjs",
+    "format": "prettier --write .",
+    "verify": "npm run typecheck && npm run test && npm run build && npm run test:build"
   },
   "dependencies": {
+    "@astrojs/react": "^7.1.1",
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.4.2",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.7",
-    "@eslint/js": "^10.0.1",
-    "@rolldown/plugin-babel": "^0.2.4",
-    "@types/babel__core": "^7.20.5",
-    "@types/node": "^24.19.2",
+    "@astrojs/check": "^0.9.12",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
-    "babel-plugin-react-compiler": "^1.0.0",
-    "eslint": "^10.13.0",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.7",
-    "globals": "^17.13.0",
+    "jsdom": "^30.1.3",
+    "node-html-parser": "^9.0.5",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.2",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "sharp": "^0.35.5",
     "typescript": "~6.0.3",
-    "typescript-eslint": "^8.71.2",
-    "vite": "^8.3.4"
+    "vitest": "^5.0.5"
   }
 }

@@ -1,0 +1,62 @@
+---
+import Section from '../ui/Section.astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Button from '../ui/Button.astro';
+import Card from '../ui/Card.astro';
+import ContactForm from '../islands/ContactForm';
+import { contactoCopy } from '../../data/contacto';
+import { SITE } from '../../config/site';
+import { buildMailtoUrl, buildWhatsAppUrl } from '../../lib/contact';
+
+const mailto = buildMailtoUrl(SITE.email);
+const whatsapp = buildWhatsAppUrl(SITE.whatsapp);
+const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? null;
+---
+
+<Section id="contacto" tone="deep">
+  <div class="grid gap-12 lg:grid-cols-2 lg:items-start">
+    <div>
+      <SectionLabel text={contactoCopy.label} />
+      <div class="mt-4"><SectionHeading id="contacto-titulo" lines={contactoCopy.titleLines} /></div>
+      <p class="text-muted mt-6 max-w-xl text-lg">{contactoCopy.lead}</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <Button href={contactoCopy.primary.href} cta={contactoCopy.primary.cta}>
+          {contactoCopy.primary.label}
+        </Button>
+        <Button href={contactoCopy.secondary.href} variant="secondary" cta={contactoCopy.secondary.cta}>
+          {contactoCopy.secondary.label}
+        </Button>
+      </div>
+      <ul class="mt-10 space-y-2">
+        {
+          mailto && (
+            <li>
+              <a href={mailto} class="text-accent font-semibold hover:underline">
+                {SITE.email}
+              </a>
+            </li>
+          )
+        }
+        {
+          whatsapp && (
+            <li>
+              <a
+                href={whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-accent font-semibold hover:underline"
+              >
+                WhatsApp
+              </a>
+            </li>
+          )
+        }
+        <li class="text-muted">{SITE.location.label}</li>
+      </ul>
+    </div>
+    <Card>
+      <ContactForm client:idle copy={contactoCopy} email={SITE.email} endpoint={endpoint} />
+    </Card>
+  </div>
+</Section>

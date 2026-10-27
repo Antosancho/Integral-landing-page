@@ -1,0 +1,14 @@
+---
+interface Props {
+  initials: string;
+  name: string;
+}
+const { initials } = Astro.props;
+---
+
+<div
+  class="bg-accent-soft text-accent flex size-16 shrink-0 items-center justify-center rounded-full font-extrabold"
+  aria-hidden="true"
+>
+  {initials}
+</div>

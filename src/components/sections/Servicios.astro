@@ -1,0 +1,46 @@
+---
+import Section from '../ui/Section.astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Card from '../ui/Card.astro';
+import { serviciosIntro, servicios } from '../../data/servicios';
+---
+
+<Section id="servicios" tone="deep">
+  <SectionLabel text={serviciosIntro.label} />
+  <div class="mt-4"><SectionHeading id="servicios-titulo" lines={serviciosIntro.titleLines} /></div>
+  {serviciosIntro.intro && <p class="text-muted mt-6 max-w-2xl text-lg">{serviciosIntro.intro}</p>}
+  <div class="mt-12 grid gap-6 sm:mt-16 lg:grid-cols-3">
+    {
+      servicios.map((s) => (
+        <Card as="article" class="flex flex-col">
+          <p class="text-accent font-mono text-sm">{s.code}</p>
+          <h3 class="mt-3 text-xl font-extrabold">{s.title}</h3>
+          <p class="text-muted mt-3">{s.description}</p>
+          <ul class="mt-5 flex flex-col gap-3 text-sm">
+            {s.includes.map((i) => (
+              <li class="flex gap-3">
+                <svg
+                  viewBox="0 0 24 24"
+                  class="text-accent mt-0.5 size-4 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m5 12 5 5 9-10" />
+                </svg>
+                <span>{i}</span>
+              </li>
+            ))}
+          </ul>
+          <a href={s.cta.href} data-cta={s.cta.cta} class="text-accent mt-auto pt-6 font-bold">
+            {s.cta.label} <span aria-hidden="true">→</span>
+          </a>
+        </Card>
+      ))
+    }
+  </div>
+</Section>

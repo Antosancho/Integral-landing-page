@@ -1,0 +1,20 @@
+---
+import Container from './Container.astro';
+
+interface Props {
+  id: string;
+  tone?: 'default' | 'deep';
+  class?: string;
+}
+const { id, tone = 'default', class: className = '' } = Astro.props;
+---
+
+<section
+  id={id}
+  aria-labelledby={`${id}-titulo`}
+  class:list={['py-20 sm:py-28', tone === 'deep' && 'bg-bg-deep', className]}
+>
+  <Container>
+    <slot />
+  </Container>
+</section>

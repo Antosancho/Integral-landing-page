@@ -1,0 +1,17 @@
+---
+import Section from '../ui/Section.astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Card from '../ui/Card.astro';
+import CostCalculator from '../islands/CostCalculator';
+import { calculadoraCopy, calculatorTasks } from '../../data/calculadora';
+---
+
+<Section id="calculadora">
+  <SectionLabel text={calculadoraCopy.label} />
+  <div class="mt-4"><SectionHeading id="calculadora-titulo" lines={calculadoraCopy.titleLines} /></div>
+  <p class="text-muted mt-6 max-w-2xl text-lg">{calculadoraCopy.intro}</p>
+  <Card class="mt-12 sm:mt-16">
+    <CostCalculator client:visible tasks={calculatorTasks} copy={calculadoraCopy} />
+  </Card>
+</Section>

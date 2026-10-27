@@ -1,0 +1,82 @@
+---
+import { SITE } from '../../config/site';
+import LogoMark from '../ui/LogoMark.astro';
+import Container from '../ui/Container.astro';
+import Button from '../ui/Button.astro';
+---
+
+<header class="border-border/60 bg-bg/80 fixed inset-x-0 top-0 z-50 border-b backdrop-blur">
+  <Container class="flex items-center justify-between gap-4 py-3">
+    <a href="#inicio" aria-label={`${SITE.name}, ir al inicio`}><LogoMark /></a>
+    <nav aria-label="Principal" class="hidden lg:flex">
+      <ul class="flex items-center gap-6">
+        {
+          SITE.nav.map((item) => (
+            <li>
+              <a href={item.href} class="text-muted hover:text-text text-sm font-semibold whitespace-nowrap transition-colors">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <Button href={SITE.headerCta.href} cta={SITE.headerCta.cta} class="hidden whitespace-nowrap lg:inline-flex">
+      {SITE.headerCta.label}
+    </Button>
+    <button
+      type="button"
+      id="menu-toggle"
+      class="text-text -mr-2 p-2 lg:hidden"
+      aria-controls="menu-movil"
+      aria-expanded="false"
+      aria-label="Abrir menú"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        class="size-6"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M4 7h16M4 12h16M4 17h16"></path>
+      </svg>
+    </button>
+  </Container>
+  <nav id="menu-movil" aria-label="Menú móvil" hidden class="border-border/60 border-t lg:hidden">
+    <Container class="flex flex-col gap-1 py-4">
+      {
+        SITE.nav.map((item) => (
+          <a href={item.href} class="text-text hover:text-accent rounded-xl px-2 py-3 font-semibold">
+            {item.label}
+          </a>
+        ))
+      }
+      <Button href={SITE.headerCta.href} cta={`${SITE.headerCta.cta}-movil`} class="mt-2">
+        {SITE.headerCta.label}
+      </Button>
+    </Container>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('menu-movil');
+  if (toggle && menu) {
+    const setOpen = (open: boolean) => {
+      menu.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    };
+    toggle.addEventListener('click', () => setOpen(menu.hidden === true));
+    menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.hidden) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+  }
+</script>

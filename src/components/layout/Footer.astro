@@ -1,0 +1,33 @@
+---
+import { SITE } from '../../config/site';
+import { footer } from '../../data/footer';
+import LogoMark from '../ui/LogoMark.astro';
+import Container from '../ui/Container.astro';
+---
+
+<footer class="border-border bg-bg-deep border-t pt-12 pb-28 md:pb-12">
+  <Container class="flex flex-col gap-8">
+    <div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+      <div class="max-w-md">
+        <LogoMark />
+        <p class="text-muted mt-4">{footer.tagline}</p>
+      </div>
+      <nav aria-label="Pie de página">
+        <ul class="flex flex-wrap gap-x-6 gap-y-3">
+          {
+            SITE.nav.map((item) => (
+              <li>
+                <a href={item.href} class="text-muted hover:text-text text-sm font-semibold">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+    <p class="text-muted border-border border-t pt-6 text-sm">
+      {`${SITE.location.label} · © ${new Date().getFullYear()} ${SITE.name}`}
+    </p>
+  </Container>
+</footer>

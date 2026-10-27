@@ -1,0 +1,41 @@
+---
+import Container from '../ui/Container.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Button from '../ui/Button.astro';
+import { hero } from '../../data/hero';
+---
+
+<section id="inicio" aria-labelledby="inicio-titulo" class="relative overflow-hidden pt-36 pb-20 sm:pt-44">
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--color-accent-soft),transparent_60%)]"
+  >
+  </div>
+  <Container class="relative">
+    <p class="text-accent mb-6 text-xs font-bold tracking-[0.18em] uppercase">— {hero.overline} —</p>
+    <SectionHeading as="h1" id="inicio-titulo" lines={hero.titleLines} />
+    <p class="text-muted mt-8 max-w-2xl text-lg">{hero.lead}</p>
+    <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+      <Button href={hero.primary.href} cta={hero.primary.cta}>{hero.primary.label}</Button>
+      <Button href={hero.secondary.href} cta={hero.secondary.cta} variant="secondary">
+        {hero.secondary.label}
+      </Button>
+    </div>
+    <p class="bg-accent-soft text-accent mt-10 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm">
+      <svg
+        viewBox="0 0 24 24"
+        class="size-4 shrink-0"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"></path>
+        <circle cx="12" cy="10" r="2.5"></circle>
+      </svg>
+      {hero.locationNote}
+    </p>
+  </Container>
+</section>

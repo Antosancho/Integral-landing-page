@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Astro / env
+dist/
+.astro/
+.env
+.env.*
+!.env.example

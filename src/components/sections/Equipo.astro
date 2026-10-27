@@ -1,0 +1,28 @@
+---
+import Section from '../ui/Section.astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Card from '../ui/Card.astro';
+import Avatar from '../ui/Avatar.astro';
+import { equipoIntro, team } from '../../data/equipo';
+---
+
+<Section id="equipo">
+  <SectionLabel text={equipoIntro.label} />
+  <div class="mt-4"><SectionHeading id="equipo-titulo" lines={equipoIntro.titleLines} /></div>
+  {equipoIntro.intro && <p class="text-muted mt-6 max-w-2xl text-lg">{equipoIntro.intro}</p>}
+  <div class="mt-12 grid gap-6 sm:mt-16 md:grid-cols-2">
+    {
+      team.map((m) => (
+        <Card as="article" class="flex gap-5">
+          <Avatar initials={m.initials} name={m.name} />
+          <div>
+            <h3 class="text-xl font-extrabold">{m.name}</h3>
+            <p class="text-accent text-sm font-semibold">{m.role}</p>
+            <p class="text-muted mt-3">{m.text}</p>
+          </div>
+        </Card>
+      ))
+    }
+  </div>
+</Section>

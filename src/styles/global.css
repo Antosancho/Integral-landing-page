@@ -1,0 +1,73 @@
+@import '@fontsource-variable/plus-jakarta-sans';
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans Variable', 'Segoe UI', system-ui, sans-serif;
+
+  --color-bg: #07111b;
+  --color-bg-deep: #040a11;
+  --color-surface: #0d1e2f;
+  --color-surface-2: #0a1826;
+  --color-border: #1d3247;
+  --color-border-strong: #24394e;
+  --color-field-border: #5b7590;
+  --color-text: #eef3f7;
+  --color-muted: #9fb0c2;
+  --color-accent: #8db8e3;
+  --color-accent-soft: rgb(141 184 227 / 0.14);
+
+  --container-page: 68.75rem; /* 1100px → clase max-w-page */
+
+  --text-display: clamp(2.75rem, 6vw + 1rem, 5.25rem); /* H1: 84px en desktop */
+  --text-display--line-height: 1.02;
+  --text-h2: clamp(2rem, 2.5vw + 1.25rem, 2.75rem); /* H2: 44px en desktop */
+  --text-h2--line-height: 1.08;
+
+  --animate-marquee: marquee 40s linear infinite;
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
