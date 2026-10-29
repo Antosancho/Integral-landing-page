@@ -1,5 +1,7 @@
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { loadHtml, visibleText } from './helpers';
+import { DIST, loadHtml, visibleText } from './helpers';
 
 const root = loadHtml('index.html');
 const text = visibleText(root);
@@ -142,5 +144,41 @@ describe('estructura de dist/index.html', () => {
   it('15. el menú móvil está enlazado', () => {
     expect(root.querySelector('button[aria-controls="menu-movil"]')).not.toBeNull();
     expect(root.querySelector('#menu-movil')).not.toBeNull();
+  });
+
+  it('16. el header usa el logo PNG del DS, decorativo dentro de un link con aria-label', () => {
+    const img = root.querySelector('header img[src="/brand/factor-integral-horizontal-oscuro.png"]');
+    expect(img).not.toBeNull();
+    expect(img?.getAttribute('width')).toBe('296');
+    expect(img?.getAttribute('height')).toBe('72');
+    expect(img?.getAttribute('alt')).toBe('');
+    expect(img?.parentNode?.getAttribute('aria-label')).toBeTruthy();
+  });
+
+  it('17. el footer usa el logo PNG con alt', () => {
+    const img = root.querySelector('footer img[src="/brand/factor-integral-horizontal-oscuro.png"]');
+    expect(img).not.toBeNull();
+    expect(img?.getAttribute('alt')).toBe('Factor Integral');
+  });
+
+  it('18. existen los archivos del logo y del favicon', () => {
+    expect(existsSync(path.join(DIST, 'brand/factor-integral-horizontal-oscuro.png'))).toBe(true);
+    expect(existsSync(path.join(DIST, 'favicon.png'))).toBe(true);
+  });
+
+  it('19. no se redibuja la ∫', () => {
+    expect(root.toString()).not.toContain('∫');
+  });
+
+  it('20. no hay gradientes', () => {
+    const html = root.toString();
+    expect(html).not.toContain('radial-gradient');
+    expect(html).not.toContain('linear-gradient');
+  });
+
+  it('21. el textarea del formulario está preparado (scrollbar del DS, sin resize)', () => {
+    const cls = root.querySelector('#formulario-contacto textarea#mensaje')?.getAttribute('class') ?? '';
+    expect(cls).toContain('scrollbar-ds');
+    expect(cls).toContain('resize-none');
   });
 });

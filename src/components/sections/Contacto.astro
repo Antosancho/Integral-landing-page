@@ -18,8 +18,10 @@ const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? null;
   <div class="grid gap-12 lg:grid-cols-2 lg:items-start">
     <div>
       <SectionLabel text={contactoCopy.label} />
-      <div class="mt-4"><SectionHeading id="contacto-titulo" lines={contactoCopy.titleLines} /></div>
-      <p class="text-muted mt-6 max-w-xl text-lg">{contactoCopy.lead}</p>
+      <div class="mt-4">
+        <SectionHeading id="contacto-titulo" lines={contactoCopy.titleLines} />
+      </div>
+      <p class="text-ink-muted mt-6 max-w-xl text-lg">{contactoCopy.lead}</p>
       <div class="mt-8 flex flex-wrap gap-3">
         <Button href={contactoCopy.primary.href} cta={contactoCopy.primary.cta}>
           {contactoCopy.primary.label}
@@ -29,30 +31,26 @@ const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? null;
         </Button>
       </div>
       <ul class="mt-10 space-y-2">
-        {
-          mailto && (
-            <li>
-              <a href={mailto} class="text-accent font-semibold hover:underline">
-                {SITE.email}
-              </a>
-            </li>
-          )
-        }
-        {
-          whatsapp && (
-            <li>
-              <a
-                href={whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-accent font-semibold hover:underline"
-              >
-                WhatsApp
-              </a>
-            </li>
-          )
-        }
-        <li class="text-muted">{SITE.location.label}</li>
+        {mailto && (
+          <li>
+            <a href={mailto} class="text-link font-semibold hover:underline">
+              {SITE.email}
+            </a>
+          </li>
+        )}
+        {whatsapp && (
+          <li>
+            <a
+              href={whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-link font-semibold hover:underline"
+            >
+              WhatsApp
+            </a>
+          </li>
+        )}
+        <li class="text-ink-muted">{SITE.location.label}</li>
       </ul>
     </div>
     <Card>

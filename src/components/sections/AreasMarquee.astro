@@ -2,27 +2,30 @@
 import { areas } from '../../data/areas';
 ---
 
-<div class="border-border overflow-hidden border-y py-5" role="region" aria-label="Áreas del negocio que abarcamos">
+<div
+  class="border-border overflow-hidden border-y py-5"
+  role="region"
+  aria-label="Áreas del negocio que abarcamos"
+>
   <div class="animate-marquee flex w-max hover:[animation-play-state:paused] motion-reduce:w-auto motion-reduce:animate-none motion-reduce:flex-wrap">
-    <ul class="text-muted flex gap-10 pr-10 font-bold motion-reduce:flex-wrap">
-      {
-        areas.map((a) => (
-          <li class="flex items-center gap-10 whitespace-nowrap">
-            {a}
-            <span aria-hidden="true">•</span>
-          </li>
-        ))
-      }
+    <ul class="font-display text-ink-muted flex gap-10 pr-10 font-bold motion-reduce:flex-wrap">
+      {areas.map((a) => (
+        <li class="flex items-center gap-10 whitespace-nowrap">
+          {a}
+          <span aria-hidden="true">•</span>
+        </li>
+      ))}
     </ul>
-    <ul class="text-muted flex gap-10 pr-10 font-bold motion-reduce:hidden" aria-hidden="true">
-      {
-        areas.map((a) => (
-          <li class="flex items-center gap-10 whitespace-nowrap">
-            {a}
-            <span aria-hidden="true">•</span>
-          </li>
-        ))
-      }
+    <ul
+      class="font-display text-ink-muted flex gap-10 pr-10 font-bold motion-reduce:hidden"
+      aria-hidden="true"
+    >
+      {areas.map((a) => (
+        <li class="flex items-center gap-10 whitespace-nowrap">
+          {a}
+          <span aria-hidden="true">•</span>
+        </li>
+      ))}
     </ul>
   </div>
 </div>

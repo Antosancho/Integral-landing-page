@@ -49,7 +49,8 @@ de la zona) pida una visita. Plan de implementación detallado en `plan.md`.
 | Framework | **Astro 7.4**, salida estática (HTML pre-renderizado por SEO) |
 | Interactividad | Islas **React 19** solo en la calculadora (`client:visible`) y el formulario (`client:idle`) |
 | Estilos | **Tailwind CSS 4** (`@tailwindcss/vite`), tokens en `@theme` de `src/styles/global.css` |
-| Fuente | Plus Jakarta Sans vía `@fontsource-variable/plus-jakarta-sans` (self-hosted) |
+| Diseño | Sistema de diseño **Integral**, tema Oscuro (`https://claude.ai/artifact/GqLNZDeRjXRUZJSQEiJbhz`); sus tokens están copiados en `@theme` de `global.css` |
+| Fuente | **IBM Plex Sans** (texto y números, `@fontsource/ibm-plex-sans`) + **Plus Jakarta Sans** (títulos, nav, rótulos, `@fontsource-variable/plus-jakarta-sans`), self-hosted |
 | Tests | Vitest 5 + Testing Library + jsdom; tests sobre `dist/` con `node-html-parser` |
 | Node | **≥ 22.23.4** (Astro 7.4 lo exige). `.nvmrc` = 24 |
 
@@ -80,11 +81,15 @@ src/
     calculator.ts       fórmulas de la calculadora
     validation.ts       validación del formulario
     contact-submit.ts   envío: endpoint (PUBLIC_CONTACT_ENDPOINT) → si no hay, mailto
-  styles/global.css     Tailwind + tokens de diseño
+    textarea.ts         alto del textarea que crece (144–320px; arriba, scroll con `scrollbar-ds`)
+  styles/global.css     Tailwind + tokens del DS (tema Oscuro), utilidad scrollbar-ds
+    design-system.test.ts   valores de tokens y contraste WCAG
   layouts/BaseLayout.astro   <html lang="es-AR">, SEO, skip link
   components/
     seo/SEO.astro       meta, canonical, Open Graph, Twitter, JSON-LD
+    design-system-usage.test.ts   prohíbe tokens viejos, hex, gradientes y radios fuera del DS en componentes
     ui/                 Container, Section, SectionLabel, SectionHeading, Button, Card, Avatar, LogoMark
+      classes.ts        clases de botones/campos compartidas entre Astro y las islas React
     layout/             Header (menú móvil con <script>), Footer, FloatingCTA
     sections/           una por bloque de la página (Hero … Contacto)
     islands/            CostCalculator.tsx y ContactForm.tsx (React)
@@ -92,6 +97,8 @@ src/
 tests/
   setup.ts              jest-dom, mocks de matchMedia y scrollIntoView
   build/                seo.test.ts y structure.test.ts sobre dist/
+public/
+  brand/                logo horizontal PNG del DS (solo sobre `surface-header`); favicon.png = ícono del DS
 ```
 
 ### Orden de la página e ids de ancla
@@ -103,13 +110,18 @@ Footer → botón flotante. Cada sección: `<section id aria-labelledby="<id>-ti
 ## Convenciones
 
 - **Textos solo en `src/data/` o `src/config/site.ts`**, nunca hardcodeados en componentes.
-- **Colores solo por tokens** (`bg-bg`, `bg-surface`, `text-muted`, `text-accent`, `border-border`, …). Nada de hex
-  en componentes. Tema oscuro azul noche + un único acento celeste `#8db8e3`. Los bordes de campos de formulario
-  usan `border-field-border` (contraste ≥ 3:1), no `border-border`.
+- **Colores solo por tokens del DS** (`bg-bg`, `bg-surface`, `bg-surface-sunken`, `bg-surface-header`, `text-ink`,
+  `text-ink-muted`, `text-link`, `text-info`, `text-success`, `bg-primary`, `border-border`, `border-border-control`, …).
+  Nada de hex ni paleta por defecto de Tailwind (desactivada con `--color-*: initial`). Links → `text-link`; acentos
+  decorativos → `text-info`; plata a favor → `text-success`. Nada de gradientes. Nunca redibujar la "∫" del logo.
+- Campos de formulario con `inputClass` / `textareaClass` / `labelClass` de `ui/classes.ts` (borde `border-control`,
+  error en `danger`); botones de las islas con `buttonBase` + `buttonSize` + `buttonVariant` (+ `buttonDisabled`).
 - `Card` maneja su padding con la prop `padding` (`md`/`sm`); no pasarle clases `p-*`.
 - El menú de escritorio aparece desde `lg:`; debajo se usa el menú móvil.
 - Patrón de sección: etiqueta corta en mayúsculas con punto (`SectionLabel`) + título en dos líneas
-  (`SectionHeading`, línea 2 en `text-muted`) + contenido en tarjetas (`Card`). Botones píldora (`rounded-full`).
+  (`SectionHeading`, línea 2 en `text-ink-muted`) + contenido en tarjetas (`Card`). Radios del DS: botones
+  `rounded-md` (10px), tarjetas `rounded-lg` (16px), inputs `rounded-sm` (6px); `rounded-full` solo en chips, avatar
+  y nav del header. Títulos en Plus Jakarta (`font-display`, regla base en h1–h3); números con `tabular-nums`.
 - HTML semántico y accesible: un solo H1, jerarquía H2/H3, FAQ con `<details>`, foco visible, labels en todos los
   campos, `prefers-reduced-motion` respetado (marquesina y contador).
 - Los CTA llevan `data-cta="<nombre>"` para medir con analytics más adelante.
@@ -127,7 +139,7 @@ Footer → botón flotante. Cada sección: `<section id aria-labelledby="<id>-ti
 ## Pendientes de contenido
 
 Número de WhatsApp (`SITE.whatsapp`, hoy `null`), dominio definitivo (`factorintegral.ar` a confirmar), email
-confirmado, logo en SVG, imagen OG definitiva, backend del formulario (`PUBLIC_CONTACT_ENDPOINT`), analytics, y
+confirmado, logo en SVG (hoy PNG del DS en `public/brand/` y `public/favicon.png`), imagen OG definitiva, backend del formulario (`PUBLIC_CONTACT_ENDPOINT`), analytics, y
 un caso real con permiso para activar la sección "Caso real".
 
 ## Git

@@ -18,7 +18,9 @@ describe('SEO de index.html', () => {
   });
 
   it('canonical', () => {
-    expect(html.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe('https://factorintegral.ar/');
+    expect(html.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe(
+      'https://factorintegral.ar/',
+    );
   });
 
   it('Open Graph y Twitter', () => {
@@ -32,12 +34,16 @@ describe('SEO de index.html', () => {
 
   it('robots y theme-color', () => {
     expect(meta('meta[name="robots"]')).toBe('index, follow');
-    expect(html.querySelector('meta[name="theme-color"]')).not.toBeNull();
+    expect(meta('meta[name="theme-color"]')).toBe('#0a1826');
   });
 
   it('favicon y og-image', () => {
-    expect(html.querySelector('link[rel="icon"]')?.getAttribute('href')).toBe('/favicon.svg');
-    expect(existsSync(path.join(DIST, 'favicon.svg'))).toBe(true);
+    const icon = html.querySelector('link[rel="icon"]');
+    expect(icon?.getAttribute('href')).toBe('/favicon.png');
+    expect(icon?.getAttribute('type')).toBe('image/png');
+    expect(html.querySelector('link[rel="apple-touch-icon"]')?.getAttribute('href')).toBe('/favicon.png');
+    expect(existsSync(path.join(DIST, 'favicon.png'))).toBe(true);
+    expect(existsSync(path.join(DIST, 'favicon.svg'))).toBe(false);
     expect(existsSync(path.join(DIST, 'og-image.png'))).toBe(true);
   });
 

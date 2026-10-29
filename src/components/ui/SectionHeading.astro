@@ -10,7 +10,5 @@ const { id, lines, as: Tag = 'h2' } = Astro.props;
 ---
 
 <Tag id={id} class:list={['font-extrabold tracking-tight', Tag === 'h1' ? 'text-display' : 'text-h2']}>
-  <span class="text-text block">{lines[0]}</span>
-  {' '}
-  <span class="text-muted block">{lines[1]}</span>
+  <span class="text-ink block">{lines[0]}</span> <span class="text-ink-muted block">{lines[1]}</span>
 </Tag>

@@ -8,7 +8,7 @@ export const SITE = {
   description:
     'Encontramos dónde tu comercio pierde plata y lo resolvemos con IA y sistemas a medida. Vamos a tu local en Chabás y la zona, en el sur de Santa Fe.',
   ogImage: '/og-image.png',
-  themeColor: '#07111b',
+  themeColor: '#0a1826',
   email: 'hola@factorintegral.ar' as string | null, // a confirmar
   whatsapp: null as string | null, // completar en formato internacional sin `+`, ej. `549346XXXXXXX`
   location: {

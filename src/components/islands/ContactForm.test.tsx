@@ -138,3 +138,77 @@ describe('ContactForm', () => {
     expect(await screen.findByText(form.error)).toBeInTheDocument();
   });
 });
+
+function mockScrollHeight(value: number) {
+  Object.defineProperty(HTMLTextAreaElement.prototype, 'scrollHeight', {
+    configurable: true,
+    get: () => value,
+  });
+}
+
+describe('ContactForm — textarea que crece', () => {
+  afterEach(() => {
+    delete (HTMLTextAreaElement.prototype as unknown as Record<string, unknown>).scrollHeight;
+  });
+
+  const getTextarea = () => screen.getByLabelText(form.messageLabel) as HTMLTextAreaElement;
+
+  it('mensaje corto: alto mínimo y sin scroll', () => {
+    mockScrollHeight(60);
+    renderForm();
+    act(() => setContactPrefill('Hola'));
+    expect(getTextarea().style.height).toBe('144px');
+    expect(getTextarea().style.overflowY).toBe('hidden');
+  });
+
+  it('prefill largo: crece hasta el máximo y habilita scroll', () => {
+    mockScrollHeight(600);
+    renderForm();
+    act(() => setContactPrefill('x'.repeat(700)));
+    expect(getTextarea().style.height).toBe('320px');
+    expect(getTextarea().style.overflowY).toBe('auto');
+  });
+
+  it('alto intermedio: sigue al contenido', () => {
+    mockScrollHeight(230);
+    renderForm();
+    act(() => setContactPrefill('x'.repeat(300)));
+    expect(getTextarea().style.height).toBe('230px');
+    expect(getTextarea().style.overflowY).toBe('hidden');
+  });
+
+  it('al borrar el texto vuelve al mínimo', () => {
+    mockScrollHeight(600);
+    renderForm();
+    act(() => setContactPrefill('x'.repeat(700)));
+    expect(getTextarea().style.height).toBe('320px');
+    mockScrollHeight(60);
+    fireEvent.change(getTextarea(), { target: { value: '' } });
+    expect(getTextarea().style.height).toBe('144px');
+  });
+
+  it('usa las clases del DS', () => {
+    renderForm();
+    expect(getTextarea()).toHaveClass('resize-none', 'scrollbar-ds');
+  });
+
+  it('al redimensionar la ventana recalcula', () => {
+    mockScrollHeight(60);
+    renderForm();
+    act(() => setContactPrefill('Hola'));
+    expect(getTextarea().style.height).toBe('144px');
+    mockScrollHeight(600);
+    act(() => {
+      window.dispatchEvent(new Event('resize'));
+    });
+    expect(getTextarea().style.height).toBe('320px');
+  });
+
+  it('el error del mensaje lleva ícono', async () => {
+    const user = userEvent.setup();
+    renderForm();
+    await user.click(screen.getByRole('button', { name: form.submit }));
+    const p = document.getElementById('mensaje-error');
+    expect(p?.querySelector('svg[aria-hidden="true"]')).not.toBeNull();
+  });
+});

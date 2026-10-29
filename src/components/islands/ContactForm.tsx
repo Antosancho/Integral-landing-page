@@ -1,7 +1,17 @@
-import { useEffect, useRef, useState, type SubmitEvent } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type SubmitEvent } from 'react';
 import type { contactoCopy } from '../../data/contacto';
 import { submitContact } from '../../lib/contact-submit';
 import { consumeContactPrefill, subscribeContactPrefill } from '../../lib/prefill';
+import { TEXTAREA_LIMITS, textareaHeight } from '../../lib/textarea';
+import {
+  buttonBase,
+  buttonDisabled,
+  buttonSize,
+  buttonVariant,
+  inputClass,
+  labelClass,
+  textareaClass,
+} from '../ui/classes';
 import { isSpam, validateContact, type ContactErrors, type ContactInput } from '../../lib/validation';
 
 interface Props {
@@ -12,18 +22,11 @@ interface Props {
 }
 
 type Status =
-  | { kind: 'idle' }
-  | { kind: 'submitting' }
-  | { kind: 'sent' }
-  | { kind: 'mailto' }
-  | { kind: 'error' };
+  { kind: 'idle' } | { kind: 'submitting' } | { kind: 'sent' } | { kind: 'mailto' } | { kind: 'error' };
 
 type FieldName = 'nombre' | 'contacto' | 'mensaje';
 
 const FIELD_ORDER: readonly FieldName[] = ['nombre', 'contacto', 'mensaje'];
-
-const fieldClass =
-  'w-full rounded-xl border border-field-border bg-surface-2 px-4 py-3 text-text aria-[invalid=true]:border-accent focus:border-accent';
 
 export default function ContactForm({ copy, email, endpoint, onNavigate }: Props) {
   const [nombre, setNombre] = useState('');
@@ -33,10 +36,11 @@ export default function ContactForm({ copy, email, endpoint, onNavigate }: Props
   const [web, setWeb] = useState('');
   const [errors, setErrors] = useState<ContactErrors>({});
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
+  const mensajeEl = useRef<HTMLTextAreaElement>(null);
   const refs = {
     nombre: useRef<HTMLInputElement>(null),
     contacto: useRef<HTMLInputElement>(null),
-    mensaje: useRef<HTMLTextAreaElement>(null),
+    mensaje: mensajeEl,
   };
 
   const lastPrefill = useRef<string | null>(null);
@@ -57,6 +61,35 @@ export default function ContactForm({ copy, email, endpoint, onNavigate }: Props
     if (pending) apply(pending);
     return subscribeContactPrefill(apply);
   }, []);
+
+  const fitMensaje = useCallback(() => {
+    const el = mensajeEl.current;
+    if (!el) return;
+    // Al pasar por 'auto' la página se achica un instante: guardar scrolls para que no salten.
+    const pageY = window.scrollY;
+    const innerTop = el.scrollTop;
+    el.style.height = 'auto';
+    const cs = window.getComputedStyle(el);
+    const borderY = (parseFloat(cs.borderTopWidth) || 0) + (parseFloat(cs.borderBottomWidth) || 0);
+    const { height, scrollable } = textareaHeight({
+      scrollHeight: el.scrollHeight,
+      borderY,
+      ...TEXTAREA_LIMITS,
+    });
+    el.style.height = `${height}px`;
+    el.style.overflowY = scrollable ? 'auto' : 'hidden';
+    el.scrollTop = innerTop;
+    if (window.scrollY !== pageY) window.scrollTo(window.scrollX, pageY);
+  }, []);
+
+  useLayoutEffect(() => {
+    fitMensaje();
+  }, [mensaje, fitMensaje]);
+
+  useEffect(() => {
+    window.addEventListener('resize', fitMensaje);
+    return () => window.removeEventListener('resize', fitMensaje);
+  }, [fitMensaje]);
 
   const navigate = onNavigate ?? ((url: string) => window.location.assign(url));
   const { form } = copy;
@@ -108,7 +141,21 @@ export default function ContactForm({ copy, email, endpoint, onNavigate }: Props
 
   const errorText = (field: FieldName) =>
     errors[field] ? (
-      <p id={`${field}-error`} className="mt-1 text-sm text-accent">
+      <p id={`${field}-error`} className="text-label text-danger mt-1.5 flex items-start gap-1.5 font-medium">
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          className="mt-0.5 size-4 shrink-0"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" x2="12" y1="8" y2="12" />
+          <line x1="12" x2="12.01" y1="16" y2="16" />
+        </svg>
         {errors[field]}
       </p>
     ) : null;
@@ -118,7 +165,7 @@ export default function ContactForm({ copy, email, endpoint, onNavigate }: Props
   return (
     <form id="formulario-contacto" noValidate onSubmit={onSubmit} className="space-y-5">
       <div>
-        <label htmlFor="nombre" className="mb-1 block font-bold">
+        <label htmlFor="nombre" className={labelClass}>
           {form.nameLabel}
         </label>
         <input
@@ -129,17 +176,17 @@ export default function ContactForm({ copy, email, endpoint, onNavigate }: Props
           autoComplete="name"
           value={nombre}
           onChange={(e) => setNombre(e.currentTarget.value)}
-          className={fieldClass}
+          className={inputClass}
           {...errorProps('nombre')}
         />
         {errorText('nombre')}
       </div>
 
       <div>
-        <label htmlFor="negocio" className="mb-1 block font-bold">
+        <label htmlFor="negocio" className={labelClass}>
           {form.businessLabel}
         </label>
-        <p id="negocio-hint" className="mb-1 text-sm text-muted">
+        <p id="negocio-hint" className="text-ink-subtle mb-1.5 text-sm">
           {form.businessHint}
         </p>
         <input
@@ -150,12 +197,12 @@ export default function ContactForm({ copy, email, endpoint, onNavigate }: Props
           aria-describedby="negocio-hint"
           value={negocio}
           onChange={(e) => setNegocio(e.currentTarget.value)}
-          className={fieldClass}
+          className={inputClass}
         />
       </div>
 
       <div>
-        <label htmlFor="contacto-campo" className="mb-1 block font-bold">
+        <label htmlFor="contacto-campo" className={labelClass}>
           {form.contactLabel}
         </label>
         <input
@@ -166,14 +213,14 @@ export default function ContactForm({ copy, email, endpoint, onNavigate }: Props
           autoComplete="on"
           value={contacto}
           onChange={(e) => setContacto(e.currentTarget.value)}
-          className={fieldClass}
+          className={inputClass}
           {...errorProps('contacto')}
         />
         {errorText('contacto')}
       </div>
 
       <div>
-        <label htmlFor="mensaje" className="mb-1 block font-bold">
+        <label htmlFor="mensaje" className={labelClass}>
           {form.messageLabel}
         </label>
         <textarea
@@ -181,9 +228,10 @@ export default function ContactForm({ copy, email, endpoint, onNavigate }: Props
           id="mensaje"
           name="mensaje"
           rows={5}
+          style={{ minHeight: TEXTAREA_LIMITS.minHeight, maxHeight: TEXTAREA_LIMITS.maxHeight }}
           value={mensaje}
           onChange={(e) => setMensaje(e.currentTarget.value)}
-          className={fieldClass}
+          className={textareaClass}
           {...errorProps('mensaje')}
         />
         {errorText('mensaje')}
@@ -192,14 +240,20 @@ export default function ContactForm({ copy, email, endpoint, onNavigate }: Props
       <div aria-hidden="true" className="hidden">
         <label>
           Web
-          <input name="web" tabIndex={-1} autoComplete="off" value={web} onChange={(e) => setWeb(e.currentTarget.value)} />
+          <input
+            name="web"
+            tabIndex={-1}
+            autoComplete="off"
+            value={web}
+            onChange={(e) => setWeb(e.currentTarget.value)}
+          />
         </label>
       </div>
 
       <button
         type="submit"
         disabled={submitting}
-        className="w-full rounded-full bg-text px-6 py-3 text-[15px] font-bold text-bg hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
+        className={`${buttonBase} ${buttonSize.lg} ${buttonVariant.primary} ${buttonDisabled} w-full`}
       >
         {submitting ? form.submitting : form.submit}
       </button>
@@ -210,7 +264,7 @@ export default function ContactForm({ copy, email, endpoint, onNavigate }: Props
           <>
             {form.mailtoSuccess}{' '}
             {email && (
-              <a href={`mailto:${email}`} className="text-accent underline">
+              <a href={`mailto:${email}`} className="text-link underline">
                 {email}
               </a>
             )}

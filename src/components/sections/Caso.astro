@@ -8,48 +8,46 @@ import { caso } from '../../data/caso';
 
 <Section id="caso">
   <SectionLabel text={caso.label} />
-  <div class="mt-4"><SectionHeading id="caso-titulo" lines={caso.titleLines} /></div>
+  <div class="mt-4">
+    <SectionHeading id="caso-titulo" lines={caso.titleLines} />
+  </div>
   <div class="mt-12 grid gap-8 sm:mt-16 lg:grid-cols-2">
     <div>
-      <span class="bg-accent-soft text-accent inline-block rounded-full px-3 py-1 text-xs font-bold">
+      <span class="bg-info-soft text-info inline-block rounded-full px-3 py-1 text-xs font-semibold">
         {caso.badge}
       </span>
-      <p class="text-muted mt-4 text-lg">{caso.text}</p>
+      <p class="text-ink-muted mt-4 text-lg">{caso.text}</p>
       <ul class="mt-6 flex flex-col gap-3">
-        {
-          caso.bullets.map((b) => (
-            <li class="flex gap-3">
-              <span class="text-accent" aria-hidden="true">
-                •
-              </span>
-              {b}
-            </li>
-          ))
-        }
+        {caso.bullets.map((b) => (
+          <li class="flex gap-3">
+            <span class="text-info" aria-hidden="true">
+              •
+            </span>
+            {b}
+          </li>
+        ))}
       </ul>
     </div>
     <Card padding="sm" class="overflow-x-auto">
       <table class="w-full text-left text-sm">
-        <caption class="text-muted pb-3 text-left text-xs">{caso.table.caption}</caption>
+        <caption class="text-ink-muted pb-3 text-left text-xs">{caso.table.caption}</caption>
         <thead>
           <tr class="border-border border-b">
             {caso.table.headers.map((h) => (
-              <th scope="col" class="py-2 pr-4 font-bold">
+              <th scope="col" class="text-ink-muted text-label py-2 pr-4 font-medium">
                 {h}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {
-            caso.table.rows.map((row) => (
-              <tr class="border-border border-b last:border-0">
-                {row.map((c) => (
-                  <td class="text-muted py-2 pr-4">{c}</td>
-                ))}
-              </tr>
-            ))
-          }
+          {caso.table.rows.map((row) => (
+            <tr class="border-border border-b last:border-0">
+              {row.map((c) => (
+                <td class="text-ink-muted py-2 pr-4 tabular-nums">{c}</td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </Card>

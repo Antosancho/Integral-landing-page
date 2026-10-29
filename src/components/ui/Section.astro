@@ -12,7 +12,7 @@ const { id, tone = 'default', class: className = '' } = Astro.props;
 <section
   id={id}
   aria-labelledby={`${id}-titulo`}
-  class:list={['py-20 sm:py-28', tone === 'deep' && 'bg-bg-deep', className]}
+  class:list={['py-20 sm:py-28', tone === 'deep' && 'bg-surface-sunken', className]}
 >
   <Container>
     <slot />

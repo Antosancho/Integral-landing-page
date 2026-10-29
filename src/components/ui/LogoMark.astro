@@ -2,14 +2,15 @@
 import { SITE } from '../../config/site';
 interface Props {
   class?: string;
+  decorative?: boolean;
 }
-const { class: className = '' } = Astro.props;
+const { class: className = '', decorative = false } = Astro.props;
 ---
 
-<span class:list={['inline-flex items-center gap-3', className]}>
-  <span
-    class="bg-surface border-border text-accent flex size-9 items-center justify-center rounded-xl border text-lg font-bold"
-    aria-hidden="true">∫</span
-  >
-  <span class="font-extrabold">{SITE.name}</span>
-</span>
+<img
+  src="/brand/factor-integral-horizontal-oscuro.png"
+  width="296"
+  height="72"
+  alt={decorative ? '' : SITE.name}
+  class:list={['h-7.5 w-auto', className]}
+/>

@@ -14,8 +14,8 @@ const sub = wa ? withWhatsapp : withoutWhatsapp;
   rel={wa ? 'noopener noreferrer' : undefined}
   data-cta="flotante"
   aria-label={`${label} ${sub}`}
-  class="bg-text text-bg fixed right-4 bottom-4 z-40 flex flex-col rounded-full px-5 py-3 leading-tight font-bold shadow-lg"
+  class="bg-primary text-ink-on-brand hover:bg-primary-hover fixed right-4 bottom-4 z-40 flex flex-col rounded-md px-5 py-3 leading-tight font-semibold shadow-lg transition-colors"
 >
   <span>{label}</span>
-  <span class="text-xs font-semibold opacity-80">{sub}</span>
+  <span class="text-xs font-medium">{sub}</span>
 </a>

@@ -7,24 +7,24 @@ import { faqIntro, faq } from '../../data/faq';
 
 <Section id="preguntas" tone="deep">
   <SectionLabel text={faqIntro.label} />
-  <div class="mt-4"><SectionHeading id="preguntas-titulo" lines={faqIntro.titleLines} /></div>
-  {faqIntro.intro && <p class="text-muted mt-6 max-w-2xl text-lg">{faqIntro.intro}</p>}
+  <div class="mt-4">
+    <SectionHeading id="preguntas-titulo" lines={faqIntro.titleLines} />
+  </div>
+  {faqIntro.intro && <p class="text-ink-muted mt-6 max-w-2xl text-lg">{faqIntro.intro}</p>}
   <div class="mt-12 flex max-w-3xl flex-col gap-3 sm:mt-16">
-    {
-      faq.map((f) => (
-        <details name="faq" class="group border-border bg-surface rounded-2xl border">
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-bold [&::-webkit-details-marker]:hidden">
-            {f.question}
-            <span
-              class="text-accent text-2xl leading-none transition-transform group-open:rotate-45"
-              aria-hidden="true"
-            >
-              +
-            </span>
-          </summary>
-          <p class="text-muted px-5 pb-5">{f.answer}</p>
-        </details>
-      ))
-    }
+    {faq.map((f) => (
+      <details name="faq" class="group border-border bg-surface rounded-lg border shadow-sm">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-semibold [&::-webkit-details-marker]:hidden">
+          {f.question}
+          <span
+            class="text-link text-2xl leading-none transition-transform group-open:rotate-45"
+            aria-hidden="true"
+          >
+            +
+          </span>
+        </summary>
+        <p class="text-ink-muted px-5 pb-5">{f.answer}</p>
+      </details>
+    ))}
   </div>
 </Section>

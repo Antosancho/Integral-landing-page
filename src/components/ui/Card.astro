@@ -8,6 +8,6 @@ const { as: Tag = 'div', class: className = '', padding = 'md' } = Astro.props;
 const paddingClass = padding === 'sm' ? 'p-5 sm:p-6' : 'p-6 sm:p-8';
 ---
 
-<Tag class:list={['border-border bg-surface rounded-3xl border', paddingClass, className]}>
+<Tag class:list={['border-border bg-surface rounded-lg border shadow-sm', paddingClass, className]}>
   <slot />
 </Tag>

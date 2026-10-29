@@ -5,29 +5,37 @@ import Container from '../ui/Container.astro';
 import Button from '../ui/Button.astro';
 ---
 
-<header class="border-border/60 bg-bg/80 fixed inset-x-0 top-0 z-50 border-b backdrop-blur">
-  <Container class="flex items-center justify-between gap-4 py-3">
-    <a href="#inicio" aria-label={`${SITE.name}, ir al inicio`}><LogoMark /></a>
+<header class="bg-surface-header fixed inset-x-0 top-0 z-50">
+  <Container class="flex h-15 items-center justify-between gap-4">
+    <a href="#inicio" aria-label={`${SITE.name}, ir al inicio`}>
+      <LogoMark decorative />
+    </a>
     <nav aria-label="Principal" class="hidden lg:flex">
-      <ul class="flex items-center gap-6">
-        {
-          SITE.nav.map((item) => (
-            <li>
-              <a href={item.href} class="text-muted hover:text-text text-sm font-semibold whitespace-nowrap transition-colors">
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
+      <ul class="flex items-center gap-1">
+        {SITE.nav.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class="font-display text-ink-on-header-muted hover:text-ink-on-brand hover:bg-header-hover inline-flex h-9.5 items-center rounded-full px-3 text-sm font-bold whitespace-nowrap transition-colors"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
-    <Button href={SITE.headerCta.href} cta={SITE.headerCta.cta} class="hidden whitespace-nowrap lg:inline-flex">
+    <Button
+      size="md"
+      href={SITE.headerCta.href}
+      cta={SITE.headerCta.cta}
+      class="hidden whitespace-nowrap lg:inline-flex"
+    >
       {SITE.headerCta.label}
     </Button>
     <button
       type="button"
       id="menu-toggle"
-      class="text-text -mr-2 p-2 lg:hidden"
+      class="text-ink-on-brand -mr-2 rounded-md p-2 lg:hidden"
       aria-controls="menu-movil"
       aria-expanded="false"
       aria-label="Abrir menú"
@@ -45,15 +53,21 @@ import Button from '../ui/Button.astro';
       </svg>
     </button>
   </Container>
-  <nav id="menu-movil" aria-label="Menú móvil" hidden class="border-border/60 border-t lg:hidden">
+  <nav
+    id="menu-movil"
+    aria-label="Menú móvil"
+    hidden
+    class="bg-surface-header border-border border-t lg:hidden"
+  >
     <Container class="flex flex-col gap-1 py-4">
-      {
-        SITE.nav.map((item) => (
-          <a href={item.href} class="text-text hover:text-accent rounded-xl px-2 py-3 font-semibold">
-            {item.label}
-          </a>
-        ))
-      }
+      {SITE.nav.map((item) => (
+        <a
+          href={item.href}
+          class="text-ink-on-brand hover:bg-header-hover rounded-md px-3 py-3 font-semibold"
+        >
+          {item.label}
+        </a>
+      ))}
       <Button href={SITE.headerCta.href} cta={`${SITE.headerCta.cta}-movil`} class="mt-2">
         {SITE.headerCta.label}
       </Button>
