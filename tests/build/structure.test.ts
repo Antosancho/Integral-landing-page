@@ -10,11 +10,11 @@ describe('estructura de dist/index.html', () => {
   it('1. tiene exactamente un h1 con el titular', () => {
     const h1 = root.querySelectorAll('h1');
     expect(h1).toHaveLength(1);
-    expect(h1[0].textContent).toContain('Tu negocio entero');
+    expect(h1[0].textContent).toContain('Automatizamos los procesos');
   });
 
   it('1b. los títulos de dos líneas no quedan pegados', () => {
-    expect(root.querySelector('h1')?.textContent).toContain('entero, sumado');
+    expect(root.querySelector('h1')?.textContent).toContain('procesos de tu');
     expect(root.querySelector('#problema-titulo')?.textContent).toContain('plata y no');
   });
 

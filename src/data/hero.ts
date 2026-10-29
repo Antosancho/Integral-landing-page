@@ -9,9 +9,9 @@ export const hero: {
   locationNote: string;
 } = {
   overline: 'Automatización con IA para comercios y pymes',
-  titleLines: ['Tu negocio entero,', 'sumado en un solo lugar.'],
+  titleLines: ['Automatizamos los procesos', 'de tu negocio.'],
   lead: 'Vamos a tu negocio, vemos cómo trabajan y encontramos dónde se pierde plata sin que nadie lo note. Después lo resolvemos con IA y sistemas de gestión a medida.',
   primary: { label: 'Calculá cuánto perdés', href: '#calculadora', cta: 'hero-calculadora' },
   secondary: { label: 'Coordinar una visita', href: '#contacto', cta: 'hero-contacto' },
-  locationNote: 'Chabás y alrededores · sur de Santa Fe',
+  locationNote: 'Región sur de Santa Fe',
 };

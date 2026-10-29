@@ -17,7 +17,7 @@ export const problema: {
   metrics: [
     { value: 'Menos', text: 'tareas manuales repetidas' },
     { value: 'Todo', text: 'conectado en un solo lugar' },
-    { value: 'Hoy', text: 'los números a la vista, no a fin de mes' },
+    { value: 'Hoy', text: 'los números a la vista' },
   ],
   leaksTitle: 'Dónde se suele ir la plata',
   leaks: [
