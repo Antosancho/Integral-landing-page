@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../../config/site';
+import { withBase } from '../../lib/paths';
 interface Props {
   class?: string;
   decorative?: boolean;
@@ -8,7 +9,7 @@ const { class: className = '', decorative = false } = Astro.props;
 ---
 
 <img
-  src="/brand/factor-integral-horizontal-oscuro.png"
+  src={withBase('/brand/factor-integral-horizontal-oscuro.png', import.meta.env.BASE_URL)}
   width="296"
   height="72"
   alt={decorative ? '' : SITE.name}

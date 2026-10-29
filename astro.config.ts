@@ -5,7 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 import { SITE } from './src/config/site';
 
 export default defineConfig({
-  site: SITE.url,
+  site: process.env.SITE_URL || SITE.url,
+  base: process.env.BASE_PATH || '/',
   integrations: [react(), sitemap()],
   vite: { plugins: [tailwindcss()] },
 });

@@ -64,6 +64,8 @@ npm test             # tests unitarios y de componentes (src/**/*.test.{ts,tsx})
 npm run test:build   # tests sobre dist/ (SEO y estructura) — requiere build previo
 npm run verify       # typecheck + test + build + test:build (correr antes de dar algo por terminado)
 npm run og           # regenera public/og-image.png
+# build como GitHub Pages (Git Bash; en Windows anteponer MSYS_NO_PATHCONV=1 para que no mangle BASE_PATH):
+SITE_URL=https://antosancho.github.io BASE_PATH=/Integral-landing-page npm run build
 ```
 
 ## Organización del código
@@ -77,6 +79,7 @@ src/
     format.ts           pesos y horas en es-AR ("$ 378.875", "50,5")
     contact.ts          links wa.me y mailto
     seo.ts              JSON-LD (ProfessionalService + WebSite + FAQPage)
+    paths.ts            withBase: prefija rutas de public/ con el base de Astro
     prefill.ts          store en globalThis: la calculadora precarga el mensaje del formulario
     calculator.ts       fórmulas de la calculadora
     validation.ts       validación del formulario
@@ -97,6 +100,7 @@ src/
 tests/
   setup.ts              jest-dom, mocks de matchMedia y scrollIntoView
   build/                seo.test.ts y structure.test.ts sobre dist/
+.github/workflows/deploy.yml   build + verify + deploy a Pages
 public/
   brand/                logo horizontal PNG del DS (solo sobre `surface-header`); favicon.png = ícono del DS
 ```
@@ -109,6 +113,8 @@ Footer → botón flotante. Cada sección: `<section id aria-labelledby="<id>-ti
 
 ## Convenciones
 
+- Links a archivos de `public/` siempre con `withBase(ruta, import.meta.env.BASE_URL)`; nunca `src="/..."` a mano
+  (la página vive en una subruta en GitHub Pages).
 - **Textos solo en `src/data/` o `src/config/site.ts`**, nunca hardcodeados en componentes.
 - **Colores solo por tokens del DS** (`bg-bg`, `bg-surface`, `bg-surface-sunken`, `bg-surface-header`, `text-ink`,
   `text-ink-muted`, `text-link`, `text-info`, `text-success`, `bg-primary`, `border-border`, `border-border-control`, …).

@@ -21,6 +21,11 @@ npm run verify       # typecheck + test + build + test:build
 npm run og           # regenera public/og-image.png
 ```
 
+## Deploy
+
+Se publica sola en cada push a `main` con GitHub Actions (`.github/workflows/deploy.yml`: verify, build y deploy).
+Requisito único: *Settings → Pages → Build and deployment → Source: **GitHub Actions***.
+
 ## Estructura
 
 ```

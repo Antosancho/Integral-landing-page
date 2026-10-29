@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { DIST, loadHtml, visibleText } from './helpers';
+import { DIST, asset, loadHtml, visibleText } from './helpers';
 
 const root = loadHtml('index.html');
 const text = visibleText(root);
@@ -147,7 +147,7 @@ describe('estructura de dist/index.html', () => {
   });
 
   it('16. el header usa el logo PNG del DS, decorativo dentro de un link con aria-label', () => {
-    const img = root.querySelector('header img[src="/brand/factor-integral-horizontal-oscuro.png"]');
+    const img = root.querySelector(`header img[src="${asset('/brand/factor-integral-horizontal-oscuro.png')}"]`);
     expect(img).not.toBeNull();
     expect(img?.getAttribute('width')).toBe('296');
     expect(img?.getAttribute('height')).toBe('72');
@@ -156,7 +156,7 @@ describe('estructura de dist/index.html', () => {
   });
 
   it('17. el footer usa el logo PNG con alt', () => {
-    const img = root.querySelector('footer img[src="/brand/factor-integral-horizontal-oscuro.png"]');
+    const img = root.querySelector(`footer img[src="${asset('/brand/factor-integral-horizontal-oscuro.png')}"]`);
     expect(img).not.toBeNull();
     expect(img?.getAttribute('alt')).toBe('Factor Integral');
   });

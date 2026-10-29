@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { SITE } from '../../src/config/site';
-import { DIST, loadHtml, readDist } from './helpers';
+import { DIST, absolute, asset, loadHtml, readDist } from './helpers';
 
 const html = loadHtml('index.html');
 const meta = (selector: string) => html.querySelector(selector)?.getAttribute('content');
@@ -19,7 +19,7 @@ describe('SEO de index.html', () => {
 
   it('canonical', () => {
     expect(html.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe(
-      'https://factorintegral.ar/',
+      absolute('/'),
     );
   });
 
@@ -39,12 +39,47 @@ describe('SEO de index.html', () => {
 
   it('favicon y og-image', () => {
     const icon = html.querySelector('link[rel="icon"]');
-    expect(icon?.getAttribute('href')).toBe('/favicon.png');
+    expect(icon?.getAttribute('href')).toBe(asset('/favicon.png'));
     expect(icon?.getAttribute('type')).toBe('image/png');
-    expect(html.querySelector('link[rel="apple-touch-icon"]')?.getAttribute('href')).toBe('/favicon.png');
+    expect(html.querySelector('link[rel="apple-touch-icon"]')?.getAttribute('href')).toBe(
+      asset('/favicon.png'),
+    );
     expect(existsSync(path.join(DIST, 'favicon.png'))).toBe(true);
     expect(existsSync(path.join(DIST, 'favicon.svg'))).toBe(false);
     expect(existsSync(path.join(DIST, 'og-image.png'))).toBe(true);
+  });
+
+  it('og:image apunta al archivo con base', () => {
+    expect(meta('meta[property="og:image"]')).toBe(absolute('/og-image.png'));
+    expect(meta('meta[name="twitter:image"]')).toBe(absolute('/og-image.png'));
+  });
+
+  it('link rel=sitemap con base', () => {
+    expect(html.querySelector('link[rel="sitemap"]')?.getAttribute('href')).toBe(asset('/sitemap-index.xml'));
+  });
+
+  it('los assets de Astro y los links absolutos llevan el base', () => {
+    const urls = html
+      .querySelectorAll('[src], [href]')
+      .flatMap((el) => [el.getAttribute('src'), el.getAttribute('href')])
+      .filter((u): u is string => !!u && u.startsWith('/') && !u.startsWith('//'));
+    expect(urls.length).toBeGreaterThan(0);
+    for (const u of urls) {
+      expect(u.startsWith(asset('/')), `sin base: ${u}`).toBe(true);
+    }
+  });
+
+  it('todo archivo referenciado existe en dist/', () => {
+    const prefix = asset('/');
+    const urls = html
+      .querySelectorAll('[src], [href]')
+      .flatMap((el) => [el.getAttribute('src'), el.getAttribute('href')])
+      .filter((u): u is string => !!u && u.startsWith(prefix) && !u.endsWith('/'));
+    expect(urls.length).toBeGreaterThan(0);
+    for (const u of urls) {
+      const rest = u.slice(prefix.length).split(/[?#]/)[0] ?? '';
+      expect(existsSync(path.join(DIST, rest)), `falta dist/${rest}`).toBe(true);
+    }
   });
 
   it('JSON-LD válido', () => {
@@ -56,7 +91,7 @@ describe('SEO de index.html', () => {
   });
 
   it('robots.txt y sitemap', () => {
-    expect(readDist('robots.txt')).toContain('Sitemap: https://factorintegral.ar/sitemap-index.xml');
+    expect(readDist('robots.txt')).toContain(`Sitemap: ${absolute('/sitemap-index.xml')}`);
     expect(existsSync(path.join(DIST, 'sitemap-index.xml'))).toBe(true);
   });
 
@@ -64,6 +99,13 @@ describe('SEO de index.html', () => {
     const notFound = loadHtml('404.html');
     expect(notFound.querySelector('meta[name="robots"]')?.getAttribute('content')).toBe('noindex, nofollow');
     expect(notFound.querySelectorAll('script[type="application/ld+json"]')).toHaveLength(0);
+  });
+
+  it('404 vuelve al inicio con base', () => {
+    const link = loadHtml('404.html')
+      .querySelectorAll('a')
+      .find((a) => a.text.includes('Volver al inicio'));
+    expect(link?.getAttribute('href')).toBe(asset('/'));
   });
 
   it('un solo h1', () => {

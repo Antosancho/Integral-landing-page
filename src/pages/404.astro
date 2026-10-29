@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Container from '../components/ui/Container.astro';
 import Button from '../components/ui/Button.astro';
+import { withBase } from '../lib/paths';
 ---
 
 <BaseLayout title="Página no encontrada | Factor Integral" noindex>
@@ -9,7 +10,7 @@ import Button from '../components/ui/Button.astro';
     <Container>
       <h1 class="text-h2 font-extrabold tracking-tight">Esta página no existe</h1>
       <div class="mt-8">
-        <Button href="/">Volver al inicio</Button>
+        <Button href={withBase('/', import.meta.env.BASE_URL)}>Volver al inicio</Button>
       </div>
     </Container>
   </main>
