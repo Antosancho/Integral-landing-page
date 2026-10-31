@@ -24,14 +24,11 @@ import Button from '../ui/Button.astro';
         ))}
       </ul>
     </nav>
-    <Button
-      size="md"
-      href={SITE.headerCta.href}
-      cta={SITE.headerCta.cta}
-      class="hidden whitespace-nowrap lg:inline-flex"
-    >
-      {SITE.headerCta.label}
-    </Button>
+    <div class="hidden lg:block">
+      <Button size="md" href={SITE.headerCta.href} cta={SITE.headerCta.cta} class="whitespace-nowrap">
+        {SITE.headerCta.label}
+      </Button>
+    </div>
     <button
       type="button"
       id="menu-toggle"

@@ -23,6 +23,7 @@ export interface Leak {
 }
 export interface Service {
   code: string;
+  audience: string;
   title: string;
   description: string;
   includes: readonly string[];
@@ -31,6 +32,11 @@ export interface Service {
 export interface Rubro {
   title: string;
   text: string;
+}
+export interface RubrosExtra {
+  title: string;
+  intro: string;
+  items: readonly Rubro[];
 }
 export interface Step {
   number: string;

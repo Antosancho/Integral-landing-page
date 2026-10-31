@@ -6,6 +6,7 @@ export const contactoCopy: {
   lead: string;
   primary: CtaLink;
   secondary: CtaLink;
+  whatsappLabel: string;
   form: {
     nameLabel: string;
     businessLabel: string;
@@ -31,6 +32,7 @@ export const contactoCopy: {
   lead: 'Contanos cómo trabajan hoy y coordinamos una visita a tu local.',
   primary: { label: 'Coordinar una visita', href: '#formulario-contacto', cta: 'contacto-formulario' },
   secondary: { label: 'Ver cómo trabajamos', href: '#metodo', cta: 'contacto-metodo' },
+  whatsappLabel: 'Escribinos por WhatsApp',
   form: {
     nameLabel: 'Nombre',
     businessLabel: 'Negocio',

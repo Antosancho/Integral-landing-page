@@ -3,11 +3,13 @@ interface Props {
   as?: 'div' | 'article' | 'li';
   class?: string;
   padding?: 'md' | 'sm';
+  panel?: boolean;
 }
-const { as: Tag = 'div', class: className = '', padding = 'md' } = Astro.props;
+const { as: Tag = 'div', class: className = '', padding = 'md', panel = false } = Astro.props;
 const paddingClass = padding === 'sm' ? 'p-5 sm:p-6' : 'p-6 sm:p-8';
+const shapeClass = panel ? 'rounded-panel p-5 sm:p-10 lg:p-14' : `rounded-lg ${paddingClass}`;
 ---
 
-<Tag class:list={['border-border bg-surface rounded-lg border shadow-sm', paddingClass, className]}>
+<Tag class:list={['border-border bg-surface border shadow-sm', shapeClass, className]}>
   <slot />
 </Tag>

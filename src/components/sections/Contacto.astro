@@ -14,7 +14,7 @@ const whatsapp = buildWhatsAppUrl(SITE.whatsapp);
 const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? null;
 ---
 
-<Section id="contacto" tone="deep">
+<Section id="contacto">
   <div class="grid gap-12 lg:grid-cols-2 lg:items-start">
     <div>
       <SectionLabel text={contactoCopy.label} />
@@ -23,6 +23,11 @@ const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? null;
       </div>
       <p class="text-ink-muted mt-6 max-w-xl text-lg">{contactoCopy.lead}</p>
       <div class="mt-8 flex flex-wrap gap-3">
+        {whatsapp && (
+          <Button href={whatsapp} external cta="contacto-whatsapp">
+            {contactoCopy.whatsappLabel}
+          </Button>
+        )}
         <Button href={contactoCopy.primary.href} cta={contactoCopy.primary.cta}>
           {contactoCopy.primary.label}
         </Button>
@@ -38,22 +43,10 @@ const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? null;
             </a>
           </li>
         )}
-        {whatsapp && (
-          <li>
-            <a
-              href={whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-link font-semibold hover:underline"
-            >
-              WhatsApp
-            </a>
-          </li>
-        )}
         <li class="text-ink-muted">{SITE.location.label}</li>
       </ul>
     </div>
-    <Card>
+    <Card panel>
       <ContactForm client:idle copy={contactoCopy} email={SITE.email} endpoint={endpoint} />
     </Card>
   </div>

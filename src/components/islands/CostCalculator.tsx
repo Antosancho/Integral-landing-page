@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ChangeEvent } from 'react';
 import type { calculadoraCopy } from '../../data/calculadora';
 import type { CalculatorTask } from '../../data/types';
 import {
@@ -11,7 +11,14 @@ import {
   type CalculatorResult,
   type TaskSelection,
 } from '../../lib/calculator';
-import { formatARS, formatARSWithCents, formatHours } from '../../lib/format';
+import {
+  caretAfterDigits,
+  editDigits,
+  formatARS,
+  formatARSWithCents,
+  formatHours,
+  formatThousands,
+} from '../../lib/format';
 import { setContactPrefill } from '../../lib/prefill';
 import {
   buttonBase,
@@ -55,7 +62,24 @@ export default function CostCalculator({ tasks, copy }: Props) {
   const [timesText, setTimesText] = useState<Record<string, string>>(() =>
     Object.fromEntries(initialSelections(tasks).map((s) => [s.id, String(s.timesPerWeek)])),
   );
-  const [salaryText, setSalaryText] = useState<string>(String(DEFAULT_SALARY));
+  // Sueldo: solo dígitos + cuántos dígitos quedan a la izquierda del cursor (-1 = no mover el cursor).
+  // Cada edición crea un objeto nuevo, así siempre se re-renderiza y el cursor no salta al final.
+  const [salaryInput, setSalaryInput] = useState({ digits: String(DEFAULT_SALARY), caretDigits: -1 });
+  const salaryText = salaryInput.digits;
+  const salaryRef = useRef<HTMLInputElement>(null);
+
+  useLayoutEffect(() => {
+    const el = salaryRef.current;
+    if (!el || salaryInput.caretDigits < 0 || document.activeElement !== el) return;
+    const pos = caretAfterDigits(el.value, salaryInput.caretDigits);
+    el.setSelectionRange(pos, pos);
+  }, [salaryInput]);
+
+  const handleSalaryChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const el = e.currentTarget;
+    const inputType = (e.nativeEvent as InputEvent).inputType ?? '';
+    setSalaryInput(editDigits(salaryText, el.value, el.selectionStart ?? el.value.length, inputType));
+  };
 
   const selections: TaskSelection[] = checks.map((s) => ({
     ...s,
@@ -79,7 +103,7 @@ export default function CostCalculator({ tasks, copy }: Props) {
   };
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+    <div className="grid gap-8 lg:grid-cols-2">
       <div className="space-y-6">
         <fieldset className="space-y-3">
           <legend className="sr-only">Tareas que hacen a mano</legend>
@@ -89,7 +113,7 @@ export default function CostCalculator({ tasks, copy }: Props) {
             return (
               <div
                 key={task.id}
-                className={`border-border flex flex-wrap items-center justify-between gap-3 rounded-lg border p-4 transition-colors ${checked ? 'bg-surface-selected' : 'bg-surface'}`}
+                className={`flex flex-wrap items-center justify-between gap-3 rounded-lg border p-4 transition-colors ${checked ? 'border-info bg-surface-hover' : 'border-border bg-surface'}`}
               >
                 <div className="flex items-start gap-3">
                   <input
@@ -137,21 +161,21 @@ export default function CostCalculator({ tasks, copy }: Props) {
             {copy.salaryLabel}
           </label>
           <input
+            ref={salaryRef}
             id="sueldo"
-            type="number"
-            min={0}
-            step={10000}
+            type="text"
             inputMode="numeric"
-            value={salaryText}
-            onChange={(e) => setSalaryText(e.currentTarget.value)}
+            autoComplete="off"
+            value={formatThousands(salaryText)}
+            onChange={handleSalaryChange}
             className={`${inputClass} tabular-nums`}
           />
         </div>
       </div>
 
-      <div className="border-border bg-surface rounded-lg border p-6 shadow-md sm:p-8">
+      <div className="border-border bg-surface-header min-w-0 rounded-lg border p-5 shadow-md sm:p-8">
         <p className="text-ink-muted">{copy.monthlyLabel}</p>
-        <p aria-hidden="true" className="mt-2 text-3xl font-bold whitespace-nowrap tabular-nums sm:text-5xl">
+        <p aria-hidden="true" className="mt-2 text-3xl font-extrabold tracking-heading tabular-nums wrap-anywhere sm:text-5xl">
           {formatARSWithCents(live)}
         </p>
         <p className="sr-only" aria-live="polite">
@@ -160,17 +184,17 @@ export default function CostCalculator({ tasks, copy }: Props) {
         {result.hasTasks && <p className="text-ink-muted mt-1 text-sm">{copy.tickerNote}</p>}
 
         <dl className="mt-6 space-y-3">
-          <div className="flex items-baseline justify-between gap-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4">
             <dt className="text-ink-muted">{copy.hoursLabel}</dt>
             <dd className="shrink-0 font-semibold whitespace-nowrap tabular-nums">{`${formatHours(result.hoursPerMonth)} h`}</dd>
           </div>
-          <div className="flex items-baseline justify-between gap-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4">
             <dt className="text-ink-muted">{copy.yearlyLabel}</dt>
             <dd className="shrink-0 font-semibold whitespace-nowrap tabular-nums">
               {formatARS(result.yearlyCost)}
             </dd>
           </div>
-          <div className="flex items-baseline justify-between gap-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4">
             <dt className="text-ink-muted">{copy.savingsLabel}</dt>
             <dd className="text-success shrink-0 font-semibold whitespace-nowrap tabular-nums">
               {formatARS(result.monthlySavings)}

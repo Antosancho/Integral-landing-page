@@ -3,7 +3,7 @@ import Section from '../ui/Section.astro';
 import SectionLabel from '../ui/SectionLabel.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Card from '../ui/Card.astro';
-import { rubrosIntro, rubros } from '../../data/rubros';
+import { rubrosIntro, rubros, rubrosTambien } from '../../data/rubros';
 ---
 
 <Section id="rubros">
@@ -20,4 +20,14 @@ import { rubrosIntro, rubros } from '../../data/rubros';
       </Card>
     ))}
   </div>
+  <h3 class="mt-12 text-2xl font-extrabold sm:mt-16">{rubrosTambien.title}</h3>
+  <p class="text-ink-muted mt-3 max-w-2xl">{rubrosTambien.intro}</p>
+  <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {rubrosTambien.items.map((r) => (
+      <li class="border-border rounded-lg border p-5">
+        <p class="font-semibold">{r.title}</p>
+        <p class="text-ink-muted mt-2 text-sm">{r.text}</p>
+      </li>
+    ))}
+  </ul>
 </Section>

@@ -8,29 +8,31 @@ const { label, titleLines, body, metrics, leaksTitle, leaks } = problema;
 ---
 
 <Section id="problema">
-  <SectionLabel text={label} />
-  <div class="mt-4">
-    <SectionHeading id="problema-titulo" lines={titleLines} />
-  </div>
-  <p class="text-ink-muted mt-8 max-w-3xl text-lg">
-    {body.text}
-    <strong class="text-info font-semibold">{body.highlight}</strong>
-  </p>
-  <div class="mt-12 grid gap-8 sm:mt-16 sm:grid-cols-3">
-    {metrics.map((m) => (
-      <div>
-        <p class="text-5xl font-bold tabular-nums">{m.value}</p>
-        <p class="text-ink-muted mt-2">{m.text}</p>
-      </div>
-    ))}
-  </div>
-  <h3 class="mt-12 text-2xl font-extrabold sm:mt-16">{leaksTitle}</h3>
-  <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-    {leaks.map((l) => (
-      <Card as="li" padding="sm">
-        <p class="font-semibold">{l.title}</p>
-        <p class="text-ink-muted mt-2 text-sm">{l.text}</p>
-      </Card>
-    ))}
-  </ul>
+  <Card panel>
+    <SectionLabel text={label} />
+    <div class="mt-4">
+      <SectionHeading id="problema-titulo" lines={titleLines} />
+    </div>
+    <p class="text-ink-muted mt-8 max-w-3xl text-lg">
+      {body.text}
+      <strong class="text-info font-semibold">{body.highlight}</strong>
+    </p>
+    <div class="mt-12 grid gap-8 sm:mt-16 sm:grid-cols-3">
+      {metrics.map((m) => (
+        <div>
+          <p class="text-5xl font-bold tabular-nums">{m.value}</p>
+          <p class="text-ink-muted mt-2">{m.text}</p>
+        </div>
+      ))}
+    </div>
+    <h3 class="mt-12 text-2xl font-extrabold sm:mt-16">{leaksTitle}</h3>
+    <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {leaks.map((l) => (
+        <li class="border-border rounded-lg border p-5">
+          <p class="font-semibold">{l.title}</p>
+          <p class="text-ink-muted mt-2 text-sm">{l.text}</p>
+        </li>
+      ))}
+    </ul>
+  </Card>
 </Section>

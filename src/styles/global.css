@@ -1,15 +1,11 @@
 @import '@fontsource-variable/plus-jakarta-sans';
-@import '@fontsource/ibm-plex-sans/latin-400.css';
-@import '@fontsource/ibm-plex-sans/latin-500.css';
-@import '@fontsource/ibm-plex-sans/latin-600.css';
-@import '@fontsource/ibm-plex-sans/latin-700.css';
 @import 'tailwindcss';
 
 /* Tokens del sistema de diseño de Integral, tema Oscuro. */
 @theme {
   --color-*: initial; /* sin paleta por defecto de Tailwind: solo tokens del DS */
 
-  --font-sans: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+  --font-sans: 'Plus Jakarta Sans Variable', 'Segoe UI', system-ui, sans-serif;
   --font-display: 'Plus Jakarta Sans Variable', 'Segoe UI', system-ui, sans-serif;
 
   --color-bg: #081420;
@@ -45,9 +41,16 @@
   --color-info-soft: #13304e;
   --color-header-hover: rgb(255 255 255 / 0.08);
 
+  /* Botón principal claro (reporte 30/10/2026). */
+  --color-cta: #eef3f7;
+  --color-cta-hover: #c9d6e3;
+  --color-on-cta: #081420;
+
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
+  --radius-field: 12px; /* campos y chips → rounded-field */
+  --radius-panel: 28px; /* contenedores grandes → rounded-panel */
 
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
   --shadow-md: 0 8px 24px rgb(0 0 0 / 0.5);
@@ -58,10 +61,16 @@
   --text-button: 0.9375rem;
   --text-button--line-height: 1.25rem;
   --tracking-overline: 0.08em;
+  --tracking-display: -0.045em; /* H1 → tracking-display */
+  --tracking-heading: -0.03em; /* H2 → tracking-heading */
+  --spacing-section: clamp(3rem, 1.5rem + 4vw, 5.5rem); /* 48 → 88 px → py-section */
+  /* Hero + marquesina entran en la primera pantalla: el aire depende del alto visible (svh). */
+  --spacing-hero: clamp(0.75rem, 2.5svh, 2.5rem); /* mt-hero / mb-hero / pb-hero */
+  --spacing-hero-top: calc(3.75rem + clamp(1.5rem, 4svh, 4rem)); /* header fijo (h-15) + aire → pt-hero-top */
 
   --container-page: 68.75rem; /* 1100px → clase max-w-page */
 
-  --text-display: clamp(2.75rem, 6vw + 1rem, 5.25rem); /* H1: 84px en desktop */
+  --text-display: clamp(2.75rem, min(6vw + 1rem, 8.5svh), 5.25rem); /* H1: hasta 84px; baja en pantallas bajas */
   --text-display--line-height: 1.02;
   --text-h2: clamp(2rem, 2.5vw + 1.25rem, 2.75rem); /* H2: 44px en desktop */
   --text-h2--line-height: 1.08;

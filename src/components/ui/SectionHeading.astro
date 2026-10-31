@@ -5,10 +5,16 @@ interface Props {
   id: string;
   lines: TitleLines;
   as?: 'h1' | 'h2';
+  accent?: boolean;
 }
-const { id, lines, as: Tag = 'h2' } = Astro.props;
+const { id, lines, as: Tag = 'h2', accent = false } = Astro.props;
 ---
 
-<Tag id={id} class:list={['font-extrabold tracking-tight', Tag === 'h1' ? 'text-display' : 'text-h2']}>
-  <span class="text-ink block">{lines[0]}</span> <span class="text-ink-muted block">{lines[1]}</span>
+<Tag
+  id={id}
+  class:list={['font-extrabold', Tag === 'h1' ? 'text-display tracking-display' : 'text-h2 tracking-heading']}
+>
+  <span class="text-ink block">{lines[0]}</span>
+  {' '}
+  <span class:list={['block', accent ? 'text-info' : 'text-ink-muted']}>{lines[1]}</span>
 </Tag>

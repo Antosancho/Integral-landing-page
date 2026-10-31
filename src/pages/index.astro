@@ -20,8 +20,11 @@ import { caso } from '../data/caso';
 <BaseLayout>
   <Header />
   <main id="contenido">
-    <Hero />
-    <AreasMarquee />
+    <!-- Hero + marquesina ocupan la primera pantalla. -->
+    <div class="flex min-h-svh flex-col">
+      <Hero />
+      <AreasMarquee />
+    </div>
     <Problema />
     <CalculadoraSection />
     <Servicios />

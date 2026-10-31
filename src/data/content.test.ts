@@ -5,7 +5,7 @@ import { areas } from './areas';
 import { problema } from './problema';
 import { calculadoraCopy, calculatorTasks } from './calculadora';
 import { serviciosIntro, servicios } from './servicios';
-import { rubrosIntro, rubros } from './rubros';
+import { rubrosIntro, rubros, rubrosTambien } from './rubros';
 import { metodoIntro, steps } from './metodo';
 import { caso } from './caso';
 import { equipoIntro, team } from './equipo';
@@ -31,6 +31,7 @@ const all = collectStrings([
   servicios,
   rubrosIntro,
   rubros,
+  rubrosTambien,
   metodoIntro,
   steps,
   caso,
@@ -107,7 +108,22 @@ describe('reglas de contenido', () => {
     expect(team).toHaveLength(2);
     expect(faq).toHaveLength(6);
     expect(areas).toHaveLength(8);
-    expect(problema.leaks).toHaveLength(7);
+    expect(problema.leaks).toHaveLength(5);
+    expect(rubrosTambien.items).toHaveLength(4);
+    expect(servicios.map((s) => s.audience)).toEqual([
+      'Para cualquier negocio',
+      'Para comercios',
+      'Para cualquier negocio',
+    ]);
+  });
+
+  it('no dice "fiado": se habla de cuentas corrientes', () => {
+    expect(all.filter((s) => /fiado/i.test(s))).toEqual([]);
+  });
+
+  it('el sistema Integral se presenta para comercios', () => {
+    expect(servicios[1].title).toContain('Integral');
+    expect(servicios[1].audience).toBe('Para comercios');
   });
 
   it('el caso real está desactivado', () => {

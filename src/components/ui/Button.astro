@@ -6,11 +6,18 @@ interface Props {
   variant?: 'primary' | 'secondary';
   size?: 'md' | 'lg';
   cta?: string;
+  external?: boolean;
   class?: string;
 }
-const { href, variant = 'primary', size = 'lg', cta, class: className = '' } = Astro.props;
+const { href, variant = 'primary', size = 'lg', cta, external = false, class: className = '' } = Astro.props;
 ---
 
-<a href={href} data-cta={cta} class:list={[buttonBase, buttonSize[size], buttonVariant[variant], className]}>
+<a
+  href={href}
+  data-cta={cta}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener noreferrer' : undefined}
+  class:list={[buttonBase, buttonSize[size], buttonVariant[variant], className]}
+>
   <slot />
 </a>

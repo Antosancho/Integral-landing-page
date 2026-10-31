@@ -7,6 +7,7 @@ export const hero: {
   primary: CtaLink;
   secondary: CtaLink;
   locationNote: string;
+  whatsappLabel: string;
 } = {
   overline: 'Automatización con IA para comercios y pymes',
   titleLines: ['Automatizamos los procesos', 'de tu negocio.'],
@@ -14,4 +15,5 @@ export const hero: {
   primary: { label: 'Calculá cuánto perdés', href: '#calculadora', cta: 'hero-calculadora' },
   secondary: { label: 'Coordinar una visita', href: '#contacto', cta: 'hero-contacto' },
   locationNote: 'Región sur de Santa Fe',
+  whatsappLabel: 'Escribinos por WhatsApp',
 };

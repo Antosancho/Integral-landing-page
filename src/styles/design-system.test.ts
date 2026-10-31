@@ -42,6 +42,9 @@ const EXPECTED: Record<string, string> = {
   info: '#7fb2e6',
   'info-soft': '#13304e',
   'header-hover': 'rgb(255 255 255 / 0.08)',
+  cta: '#eef3f7',
+  'cta-hover': '#c9d6e3',
+  'on-cta': '#081420',
 };
 
 function luminance(hex: string): number {
@@ -97,6 +100,13 @@ describe('tokens del sistema de diseño', () => {
       ['ink-on-brand', 'surface-header'],
       ['ink-on-header-muted', 'surface-header'],
       ['on-primary-soft', 'primary-soft'],
+      ['on-cta', 'cta'],
+      ['on-cta', 'cta-hover'],
+      ['ink-muted', 'surface-header'],
+      ['ink-subtle', 'surface-header'],
+      ['success', 'surface-header'],
+      ['ink', 'surface-header'],
+      ['ink', 'surface-hover'],
     ];
     for (const [fg, bg] of pairs) {
       expect(ratio(fg, bg), `${fg}/${bg}`).toBeGreaterThanOrEqual(4.5);
@@ -110,6 +120,9 @@ describe('tokens del sistema de diseño', () => {
       ['focus-ring', 'surface'],
       ['focus-ring', 'bg'],
       ['focus-ring', 'surface-header'],
+      ['cta', 'bg'],
+      ['cta', 'surface'],
+      ['info', 'surface'],
     ];
     for (const [fg, bg] of pairs) {
       expect(ratio(fg, bg), `${fg}/${bg}`).toBeGreaterThanOrEqual(3);
@@ -120,11 +133,26 @@ describe('tokens del sistema de diseño', () => {
     expect(css).toContain('--radius-sm: 6px');
     expect(css).toContain('--radius-md: 10px');
     expect(css).toContain('--radius-lg: 16px');
+    expect(css).toContain('--radius-field: 12px');
+    expect(css).toContain('--radius-panel: 28px');
   });
 
   it('define las fuentes del DS', () => {
-    expect(css).toContain("--font-sans: 'IBM Plex Sans'");
+    expect(css).toContain("--font-sans: 'Plus Jakarta Sans Variable'");
     expect(css).toContain("--font-display: 'Plus Jakarta Sans Variable'");
+    expect(css).not.toMatch(/ibm-plex|IBM Plex/i);
+  });
+
+  it('define tracking y espaciado de sección', () => {
+    expect(css).toContain('--tracking-display: -0.045em');
+    expect(css).toContain('--tracking-heading: -0.03em');
+    expect(css).toContain('--spacing-section: clamp(');
+  });
+
+  it('el hero se adapta al alto de la pantalla', () => {
+    expect(css).toMatch(/--text-display:[^;]*svh/);
+    expect(css).toContain('--spacing-hero:');
+    expect(css).toContain('--spacing-hero-top:');
   });
 
   it('declara la base oscura y la barra de scroll', () => {

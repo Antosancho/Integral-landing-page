@@ -2,25 +2,36 @@
 import Container from '../ui/Container.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Button from '../ui/Button.astro';
+import LogoMark from '../ui/LogoMark.astro';
 import { hero } from '../../data/hero';
+import { SITE } from '../../config/site';
+import { buildWhatsAppUrl } from '../../lib/contact';
+
+const wa = buildWhatsAppUrl(SITE.whatsapp);
 ---
 
-<section id="inicio" aria-labelledby="inicio-titulo" class="overflow-hidden pt-36 pb-20 sm:pt-44">
-  <Container>
-    <p class="font-display text-info mb-6 text-xs font-bold tracking-overline uppercase">
+<section id="inicio" aria-labelledby="inicio-titulo" class="pt-hero-top pb-hero flex flex-1 flex-col justify-center overflow-hidden">
+  <Container class="text-center">
+    <LogoMark decorative size="lg" class="mb-hero mx-auto hidden sm:block" />
+    <p class="font-display text-info mb-hero text-xs font-bold tracking-overline uppercase">
       — {hero.overline} —
     </p>
-    <SectionHeading as="h1" id="inicio-titulo" lines={hero.titleLines} />
-    <p class="text-ink-muted mt-8 max-w-2xl text-lg">{hero.lead}</p>
-    <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+    <SectionHeading as="h1" id="inicio-titulo" lines={hero.titleLines} accent />
+    <p class="text-ink-muted mt-hero mx-auto max-w-2xl text-base sm:text-lg">{hero.lead}</p>
+    <div class="mt-hero flex flex-col gap-3 sm:flex-row sm:justify-center">
       <Button href={hero.primary.href} cta={hero.primary.cta}>
         {hero.primary.label}
       </Button>
       <Button href={hero.secondary.href} cta={hero.secondary.cta} variant="secondary">
         {hero.secondary.label}
       </Button>
+      {wa && (
+        <Button href={wa} variant="secondary" external cta="hero-whatsapp">
+          {hero.whatsappLabel}
+        </Button>
+      )}
     </div>
-    <p class="bg-info-soft text-info mt-10 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium">
+    <p class="border-border text-info rounded-field mt-hero inline-flex items-center gap-2 border px-4 py-1.5 text-sm font-medium">
       <svg
         viewBox="0 0 24 24"
         class="size-4 shrink-0"

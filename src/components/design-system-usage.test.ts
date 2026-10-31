@@ -20,6 +20,11 @@ const FORBIDDEN: Array<[string, RegExp]> = [
   ['radios fuera del DS', /\brounded-(?:xl|2xl|3xl)\b/],
   ['fuente mono', /\bfont-mono\b/],
   ['gradientes', /gradient/],
+  [
+    'tonos de fondo fuera de la paleta reducida',
+    /\b(?:bg|disabled:bg|disabled:hover:bg|focus:bg)-(?:surface-sunken|surface-selected|primary-soft|info-soft|primary)\b/,
+  ],
+  ['prop tone de Section', /tone="deep"/],
   ['colores hex sueltos', /(?<![\w&])#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\b/],
   ['funciones de color sueltas', /\b(?:rgba?|hsla?|oklch|oklab|lab|lch)\(/],
   ['opacidad sobre texto (rompe el contraste medido)', /\bopacity-\d+\b/],
@@ -33,7 +38,7 @@ const FORBIDDEN: Array<[string, RegExp]> = [
   ],
 ];
 
-const ROUNDED_FULL_ALLOWED = ['Avatar.astro', 'Header.astro', 'Hero.astro', 'Caso.astro'];
+const ROUNDED_FULL_ALLOWED = ['Avatar.astro', 'Header.astro', 'FloatingCTA.astro', 'BaseLayout.astro', 'classes.ts'];
 
 describe('uso del sistema de diseño en componentes', () => {
   it('encuentra archivos para revisar', () => {
@@ -50,7 +55,7 @@ describe('uso del sistema de diseño en componentes', () => {
     });
   }
 
-  it('rounded-full solo en chips, avatar y nav del header', () => {
+  it('rounded-full solo en botones, avatar y nav del header', () => {
     const hits = files
       .filter(({ source }) => /\brounded-full\b/.test(source))
       .map(({ file }) => path.basename(file))
@@ -58,9 +63,10 @@ describe('uso del sistema de diseño en componentes', () => {
     expect(hits).toEqual([]);
   });
 
-  it('las clases compartidas no usan rounded-full', () => {
+  it('los botones son píldora y los campos usan rounded-field', () => {
     const classes = files.find(({ file }) => file.endsWith('ui/classes.ts'));
     expect(classes).toBeDefined();
-    expect(classes?.source).not.toMatch(/\brounded-full\b/);
+    expect(classes?.source).toMatch(/buttonBase =\s*'[^']*\brounded-full\b/);
+    expect(classes?.source).toMatch(/fieldBase =\s*'[^']*\brounded-field\b/);
   });
 });

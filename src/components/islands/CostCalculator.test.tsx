@@ -133,11 +133,56 @@ describe('CostCalculator', () => {
     renderCalc();
     const salary = screen.getByLabelText(calculadoraCopy.salaryLabel);
     await user.clear(salary);
-    expect(salary).toHaveValue(null);
+    expect(salary).toHaveValue('');
     expect((salary as HTMLInputElement).value).toBe('');
     expect(bigAmount()).toHaveTextContent('$ 0,00');
     await user.type(salary, '1500000');
-    expect((salary as HTMLInputElement).value).toBe('1500000');
+    expect((salary as HTMLInputElement).value).toBe('1.500.000');
+  });
+
+  it('el sueldo arranca con separador de miles', () => {
+    renderCalc();
+    expect(screen.getByLabelText(calculadoraCopy.salaryLabel)).toHaveValue('1.200.000');
+  });
+
+  it('el sueldo ignora letras', async () => {
+    const user = userEvent.setup();
+    renderCalc();
+    const salary = screen.getByLabelText(calculadoraCopy.salaryLabel);
+    await user.clear(salary);
+    await user.type(salary, '12a3');
+    expect(salary).toHaveValue('123');
+  });
+
+  it('el sueldo acepta pegar un número con puntos', async () => {
+    const user = userEvent.setup();
+    renderCalc();
+    const salary = screen.getByLabelText(calculadoraCopy.salaryLabel);
+    await user.clear(salary);
+    await user.paste('1.500.000');
+    expect(salary).toHaveValue('1.500.000');
+  });
+
+  it('borrar en el medio del sueldo no manda el cursor al final', async () => {
+    const user = userEvent.setup();
+    renderCalc();
+    const salary = screen.getByLabelText(calculadoraCopy.salaryLabel) as HTMLInputElement;
+    await user.click(salary);
+    salary.setSelectionRange(3, 3); // 1.2|00.000
+    await user.keyboard('{Backspace}');
+    expect(salary).toHaveValue('100.000');
+    expect(salary.selectionStart).toBe(1);
+  });
+
+  it('Backspace después de un punto borra el dígito anterior', async () => {
+    const user = userEvent.setup();
+    renderCalc();
+    const salary = screen.getByLabelText(calculadoraCopy.salaryLabel) as HTMLInputElement;
+    await user.click(salary);
+    salary.setSelectionRange(2, 2); // 1.|200.000
+    await user.keyboard('{Backspace}');
+    expect(salary).toHaveValue('200.000');
+    expect(salary.selectionStart).toBe(0);
   });
 
   it('al desmontar no quedan timers', () => {

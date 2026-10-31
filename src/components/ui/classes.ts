@@ -1,22 +1,22 @@
-// Clases del sistema de diseño de Integral compartidas entre componentes Astro e islas React.
+// Clases de la landing (base DS Integral + ajustes del reporte 30/10/2026) compartidas entre componentes Astro e islas React.
 export const buttonBase =
-  'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-colors';
+  'inline-flex items-center justify-center gap-2 rounded-full font-bold transition-colors';
 
 export const buttonSize = {
-  md: 'h-10 px-4 text-button',
-  lg: 'h-12 px-6 text-base',
+  md: 'h-10 px-5 text-button',
+  lg: 'h-12 px-7 text-button',
 } as const;
 
 export const buttonVariant = {
-  primary: 'bg-primary text-ink-on-brand hover:bg-primary-hover active:bg-primary-pressed',
-  secondary: 'border border-border-control bg-surface text-ink hover:border-ink-muted hover:bg-surface-hover',
+  primary: 'bg-cta text-on-cta hover:bg-cta-hover',
+  secondary: 'border border-border-control text-ink hover:border-ink-muted hover:bg-surface-hover',
 } as const;
 
 export const buttonDisabled =
-  'disabled:cursor-not-allowed disabled:border disabled:border-border disabled:bg-surface-sunken disabled:text-ink-disabled disabled:hover:bg-surface-sunken';
+  'disabled:cursor-not-allowed disabled:border disabled:border-border disabled:bg-surface disabled:text-ink-disabled disabled:hover:bg-surface';
 
 export const fieldBase =
-  'rounded-sm border border-border-control bg-surface text-base text-ink placeholder:text-ink-subtle hover:border-ink-muted focus-visible:border-focus-ring focus-visible:outline-offset-0 aria-[invalid=true]:border-danger-border aria-[invalid=true]:bg-danger-soft';
+  'rounded-field border border-border-control bg-surface text-base text-ink placeholder:text-ink-subtle hover:border-ink-muted focus-visible:border-focus-ring focus-visible:outline-offset-0 aria-[invalid=true]:border-danger-border aria-[invalid=true]:bg-danger-soft';
 
 export const inputClass = `${fieldBase} h-12 w-full px-3`;
 
